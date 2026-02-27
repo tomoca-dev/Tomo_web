@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TOMOCA Premium Design System
+   Cinematic coffee experience with rich, warm tones
+   All colors in HSL for consistency
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* Core brand colors - rich coffee palette */
+    --background: 30 15% 6%;
+    --foreground: 35 30% 92%;
+
+    --card: 30 12% 10%;
+    --card-foreground: 35 30% 92%;
+
+    --popover: 30 12% 10%;
+    --popover-foreground: 35 30% 92%;
+
+    /* Primary - warm gold accent */
+    --primary: 38 72% 52%;
+    --primary-foreground: 30 15% 6%;
+
+    /* Secondary - warm cream */
+    --secondary: 35 25% 18%;
+    --secondary-foreground: 35 30% 92%;
+
+    --muted: 30 10% 15%;
+    --muted-foreground: 35 15% 55%;
+
+    /* Accent - copper highlights */
+    --accent: 25 65% 45%;
+    --accent-foreground: 35 30% 92%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 35 30% 92%;
+
+    --border: 30 15% 20%;
+    --input: 30 15% 20%;
+    --ring: 38 72% 52%;
+
+    --radius: 0.5rem;
+
+    /* TOMOCA specific tokens */
+    --bean-dark: 25 45% 12%;
+    --bean-medium: 28 50% 22%;
+    --bean-light: 32 55% 32%;
+    --bean-highlight: 35 60% 42%;
+    
+    --cream: 40 35% 88%;
+    --espresso: 25 60% 8%;
+    --gold: 38 72% 52%;
+    --copper: 25 65% 45%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(180deg, hsl(30 15% 4%) 0%, hsl(30 15% 8%) 50%, hsl(25 20% 6%) 100%);
+    --gradient-bean: linear-gradient(145deg, hsl(32 55% 32%) 0%, hsl(25 45% 12%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 72% 52%) 0%, hsl(25 65% 45%) 100%);
+    
+    /* Shadows */
+    --shadow-bean: 0 8px 32px -8px hsl(25 60% 8% / 0.8);
+    --shadow-elevated: 0 24px 48px -12px hsl(25 60% 8% / 0.6);
+    --shadow-glow: 0 0 60px -10px hsl(38 72% 52% / 0.3);
+
+    /* Typography */
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    
+    /* Animation timing */
+    --ease-smooth: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --sidebar-background: 30 12% 10%;
+    --sidebar-foreground: 35 30% 92%;
+    --sidebar-primary: 38 72% 52%;
+    --sidebar-primary-foreground: 30 15% 6%;
+    --sidebar-accent: 30 15% 15%;
+    --sidebar-accent-foreground: 35 30% 92%;
+    --sidebar-border: 30 15% 20%;
+    --sidebar-ring: 38 72% 52%;
+  }
+
+  /* Light theme - elegant cream and warm tones */
+  .light {
+    --background: 40 30% 97%;
+    --foreground: 25 50% 10%;
+
+    --card: 40 25% 98%;
+    --card-foreground: 25 50% 10%;
+
+    --popover: 40 25% 98%;
+    --popover-foreground: 25 50% 10%;
+
+    --primary: 38 65% 40%;
+    --primary-foreground: 40 30% 97%;
+
+    --secondary: 35 20% 92%;
+    --secondary-foreground: 25 50% 10%;
+
+    --muted: 35 15% 94%;
+    --muted-foreground: 25 20% 40%;
+
+    --accent: 25 55% 35%;
+    --accent-foreground: 40 30% 97%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 40 30% 97%;
+
+    --border: 35 15% 88%;
+    --input: 35 15% 88%;
+    --ring: 38 65% 40%;
+
+    /* Light theme beans */
+    --bean-dark: 25 40% 25%;
+    --bean-medium: 28 45% 35%;
+    --bean-light: 32 50% 45%;
+    --bean-highlight: 35 55% 55%;
+    
+    --cream: 40 35% 88%;
+    --espresso: 25 30% 92%;
+    --gold: 38 65% 40%;
+    --copper: 25 55% 38%;
+    
+    /* Light gradients */
+    --gradient-hero: linear-gradient(180deg, hsl(40 30% 97%) 0%, hsl(35 25% 95%) 50%, hsl(40 20% 93%) 100%);
+    --gradient-bean: linear-gradient(145deg, hsl(32 50% 45%) 0%, hsl(25 40% 25%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(38 65% 40%) 0%, hsl(25 55% 38%) 100%);
+    
+    /* Light shadows */
+    --shadow-bean: 0 8px 32px -8px hsl(25 40% 20% / 0.12);
+    --shadow-elevated: 0 24px 48px -12px hsl(25 40% 20% / 0.08);
+    --shadow-glow: 0 0 60px -10px hsl(38 65% 40% / 0.15);
+
+    --sidebar-background: 40 25% 98%;
+    --sidebar-foreground: 25 50% 10%;
+    --sidebar-primary: 38 65% 40%;
+    --sidebar-primary-foreground: 40 30% 97%;
+    --sidebar-accent: 35 20% 92%;
+    --sidebar-accent-foreground: 25 50% 10%;
+    --sidebar-border: 35 15% 88%;
+    --sidebar-ring: 38 65% 40%;
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply font-medium tracking-tight;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .bean-gradient {
+    background: var(--gradient-bean);
+  }
+
+  .gold-gradient {
+    background: var(--gradient-gold);
+  }
+
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-bean {
+    box-shadow: var(--shadow-bean);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@layer utilities {
+  .ease-smooth {
+    transition-timing-function: var(--ease-smooth);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+}
