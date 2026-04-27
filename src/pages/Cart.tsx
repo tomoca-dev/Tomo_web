@@ -5,13 +5,11 @@ import { useCart } from "@/contexts/CartContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
-
-function formatMoney(value: number) {
-  return new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(value);
-}
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Cart() {
   const { items, subtotal, itemCount, setQuantity, removeItem } = useCart();
+  const { formatPrice } = useCurrency();
   const navigate = useNavigate();
 
   return (
@@ -48,7 +46,7 @@ export default function Cart() {
                         <div>
                           <p className="font-medium">{item.name}</p>
                           {item.variantName ? <p className="text-sm text-muted-foreground">{item.variantName}</p> : null}
-                          <p className="text-sm mt-1">{formatMoney(item.unitPrice)}</p>
+                          <p className="text-sm mt-1">{formatPrice(item.unitPrice)}</p>
                         </div>
                         <Button
                           variant="ghost"
@@ -89,7 +87,7 @@ export default function Cart() {
                           </Button>
                         </div>
 
-                        <p className="font-medium">{formatMoney(item.unitPrice * item.quantity)}</p>
+                        <p className="font-medium">{formatPrice(item.unitPrice * item.quantity)}</p>
                       </div>
                     </div>
                   </div>
@@ -100,7 +98,7 @@ export default function Cart() {
                 <h2 className="font-display text-2xl mb-4">Summary</h2>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">{formatMoney(subtotal)}</span>
+                  <span className="font-medium">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="text-xs text-muted-foreground mb-6">
                   Taxes and shipping are calculated at checkout.

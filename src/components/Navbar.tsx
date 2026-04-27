@@ -6,6 +6,7 @@ import { Menu, X, ShoppingBag, User, LogOut, Settings, Heart } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BeanDensityControl } from "@/components/BeanDensityControl";
+import { CurrencySelector } from "@/components/CurrencySelector";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/contexts/CartContext";
 import {
@@ -73,7 +74,7 @@ export function Navbar() {
               key={link.label}
               to={link.href}
               className={`text-sm transition-colors duration-200 relative group ${
-                location.pathname === link.href ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                location.pathname === link.href ? "text-primary" : "text-foreground hover:text-primary"
               }`}
             >
               {link.label}
@@ -85,6 +86,7 @@ export function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-1">
           <BeanDensityControl />
+          <CurrencySelector />
           <ThemeToggle />
 
           {user && (
@@ -113,38 +115,38 @@ export function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+              <DropdownMenuContent align="end" className="w-48 bg-card border-border text-[#E78A22]">
                 <div className="px-3 py-2 text-sm">
                   <p className="font-medium truncate">{user.email}</p>
                   {/* Show admin label only after loading completes */}
-                  {!loading && isAdmin && <p className="text-xs text-primary">Admin</p>}
+                  {!loading && isAdmin && <p className="text-xs text-[#E78A22]/80">Admin</p>}
                 </div>
 
-                <DropdownMenuSeparator />
+              <DropdownMenuSeparator />
 
-                {/* Desktop admin link: render only after loading completes */}
-                {!loading && isAdmin && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/admin" className="cursor-pointer flex items-center">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Admin Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-
-                <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign Out
+              {/* Desktop admin link: render only after loading completes */}
+              {!loading && isAdmin && (
+                <DropdownMenuItem asChild>
+                  <Link to="/admin" className="cursor-pointer flex items-center hover:text-[#E78A22]">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Admin Dashboard
+                  </Link>
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Link to="/login">
-              <Button variant="ghost" size="sm" className="hidden md:inline-flex">
-                Sign In
-              </Button>
-            </Link>
-          )}
+              )}
+
+              <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link to="/login">
+            <Button variant="ghost" size="sm" className="hidden md:inline-flex text-foreground">
+              Sign In
+            </Button>
+          </Link>
+        )}
 
           {/* Mobile menu toggle */}
           <Button

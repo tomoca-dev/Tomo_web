@@ -9,6 +9,7 @@ import { SectionBeans } from "@/components/SectionBeans";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useCart } from "@/contexts/CartContext";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { ProductReviews } from "@/components/ProductReviews";
 import { ProductVariantSelector } from "@/components/ProductVariantSelector";
 
@@ -69,6 +70,7 @@ export default function ProductView() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { toast } = useToast();
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     if (id) {
@@ -388,7 +390,7 @@ export default function ProductView() {
               </h1>
 
               <p className="text-2xl text-primary font-semibold mb-6">
-                ${currentPrice.toFixed(2)}
+                {formatPrice(currentPrice)}
                 <span className="text-muted-foreground text-base font-normal ml-2">
                   / {selectedVariant?.weight_grams || product.weight_grams || 250}g
                 </span>
@@ -504,7 +506,7 @@ export default function ProductView() {
                 <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full" />
-                    Free shipping over $50
+                    Free shipping over {formatPrice(50)}
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full" />

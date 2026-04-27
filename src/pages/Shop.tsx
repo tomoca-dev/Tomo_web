@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ShoppingBag, Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { SectionBeans } from "@/components/SectionBeans";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface Product {
   id: string;
@@ -30,6 +31,8 @@ export default function Shop() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const { formatPrice } = useCurrency();
 
   const fetchProducts = async () => {
     const { data, error } = await supabase
@@ -184,7 +187,7 @@ export default function Shop() {
                             {product.name}
                           </h3>
                           <span className="text-primary font-semibold">
-                            ${product.price.toFixed(2)}
+                            {formatPrice(product.price)}
                           </span>
                         </div>
                         

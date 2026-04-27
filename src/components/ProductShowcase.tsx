@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { CoffeeSplash } from "./CoffeeSplash";
 import { SectionBeans } from "./SectionBeans";
+import { useCurrency } from "@/contexts/CurrencyContext";
 import { supabase } from "@/integrations/supabase/client";
 import tomocaBeansCloseup from "@/assets/tomoca-beans-closeup.png";
 import tomoca100gDouble from "@/assets/tomoca-100g-double.png";
@@ -28,6 +29,7 @@ export function ProductShowcase() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const [products, setProducts] = useState<Product[]>([]);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -140,7 +142,7 @@ export function ProductShowcase() {
                   </div>
                   <div className="flex items-center justify-between pt-4">
                     <span className="text-2xl font-display text-foreground">
-                      ${product.price.toFixed(2)}
+                      {formatPrice(product.price)}
                     </span>
                     <span className="inline-flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
                       View <ArrowRight className="w-4 h-4 ml-1" />

@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/hooks/useAuth";
 import { BeanDensityProvider } from "@/contexts/BeanDensityContext";
 import { CartProvider } from "@/contexts/CartContext";
+import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Shop from "./pages/Shop";
@@ -30,30 +31,32 @@ const App = () => (
       <BeanDensityProvider>
         <AuthProvider>
           <CartProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:id" element={<ProductView />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/our-story" element={<OurStory />} />
-                 <Route path="/wishlist" element={<Wishlist />} />
-                 <Route path="/locations" element={<Locations />} />
-                 <Route path="/regions" element={<Regions />} />
-                 <Route path="/admin" element={<Admin />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </CartProvider>
+            <CurrencyProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/shop" element={<Shop />} />
+                    <Route path="/product/:id" element={<ProductView />} />
+                    <Route path="/cart" element={<Cart />} />
+                    <Route path="/checkout" element={<Checkout />} />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:slug" element={<BlogPost />} />
+                    <Route path="/our-story" element={<OurStory />} />
+                    <Route path="/wishlist" element={<Wishlist />} />
+                    <Route path="/locations" element={<Locations />} />
+                    <Route path="/regions" element={<Regions />} />
+                    <Route path="/admin" element={<Admin />} />
+                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </BrowserRouter>
+              </TooltipProvider>
+            </CurrencyProvider>
+          </CartProvider>
         </AuthProvider>
       </BeanDensityProvider>
     </ThemeProvider>

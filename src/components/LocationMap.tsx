@@ -66,10 +66,10 @@ export function LocationMap({ locations, className = "" }: LocationMapProps) {
         L.marker([loc.latitude, loc.longitude], { icon })
           .addTo(map)
           .bindPopup(`
-            <div style="font-family: sans-serif; min-width: 150px;">
+            <div style="font-family: var(--font-body); min-width: 150px; color: hsl(var(--foreground));">
               <strong>${loc.name}</strong>
-              ${loc.is_flagship ? '<span style="color: hsl(36,60%,50%); font-size: 11px;"> ★ Flagship</span>' : ""}
-              <br/><span style="color: #666; font-size: 12px;">${loc.address}, ${loc.city}</span>
+              ${loc.is_flagship ? '<span style="color: hsl(var(--primary)); font-size: 11px;"> ★ Flagship</span>' : ""}
+              <br/><span style="color: hsl(var(--muted-foreground)); font-size: 12px;">${loc.address}, ${loc.city}</span>
             </div>
           `);
 

@@ -2,6 +2,7 @@ import { motion, MotionValue, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
+import logoo from "@/assets/logoo.png";
 
 interface HeroContentProps {
   scrollProgress: MotionValue<number>;
@@ -19,7 +20,8 @@ export function HeroContent({ scrollProgress, reducedMotion }: HeroContentProps)
   if (reducedMotion) {
     return (
       <div className="relative z-40 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto">
-        <div className="mb-8 animate-fade-in">
+        <div className="mb-6 animate-fade-in">
+          <img src={logoo} alt="TOMOCA Logo" className="w-32 md:w-48 h-auto mx-auto mb-4" />
           <span className="text-2xl md:text-3xl font-display tracking-[0.3em] text-primary uppercase">
             TOMOCA
           </span>
@@ -51,8 +53,9 @@ export function HeroContent({ scrollProgress, reducedMotion }: HeroContentProps)
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
-        className="mb-8"
+        className="mb-6"
       >
+        <img src={logoo} alt="TOMOCA Logo" className="w-40 md:w-64 h-auto mx-auto mb-6" />
         <span className="text-2xl md:text-3xl font-display tracking-[0.3em] text-primary uppercase">
           TOMOCA
         </span>

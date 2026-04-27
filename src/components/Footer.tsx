@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Instagram, Twitter, Facebook } from "lucide-react";
+import { Instagram, Twitter, Facebook, Send } from "lucide-react";
 
 const footerLinks = {
   shop: [
@@ -24,18 +24,18 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-card border-t border-border py-16 md:py-20" role="contentinfo">
+    <footer className="bg-card border-t border-border py-16 md:py-20 text-[#E78A22]" role="contentinfo">
       <div className="container max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link 
               to="/"
-              className="text-2xl font-display tracking-[0.2em] text-primary uppercase block mb-4 hover:text-primary/80 transition-colors"
+              className="text-2xl font-display tracking-[0.2em] text-[#E78A22] uppercase block mb-4 hover:opacity-80 transition-opacity"
             >
               TOMOCA
             </Link>
-            <p className="text-muted-foreground text-sm max-w-sm mb-6">
+            <p className="text-[#E78A22]/80 text-sm max-w-sm mb-6">
               Ethiopian heritage coffee, crafted with excellence since 1953.
               From Addis Ababa to your cup.
             </p>
@@ -45,11 +45,12 @@ export function Footer() {
                 { Icon: Instagram, label: "Instagram" },
                 { Icon: Twitter, label: "Twitter" },
                 { Icon: Facebook, label: "Facebook" },
+                { Icon: Send, label: "Telegram" },
               ].map(({ Icon, label }) => (
                 <a
                   key={label}
                   href="#"
-                  className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-secondary transition-colors duration-200"
+                  className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-[#E78A22] hover:bg-secondary transition-colors duration-200"
                   aria-label={label}
                 >
                   <Icon className="w-4 h-4" />
@@ -60,7 +61,7 @@ export function Footer() {
 
           {/* Shop links */}
           <div>
-            <h3 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-medium text-[#E78A22] uppercase tracking-wider mb-4">
               Shop
             </h3>
             <ul className="space-y-3">
@@ -68,7 +69,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                    className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -79,7 +80,7 @@ export function Footer() {
 
           {/* Learn links */}
           <div>
-            <h3 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-medium text-[#E78A22] uppercase tracking-wider mb-4">
               Learn
             </h3>
             <ul className="space-y-3">
@@ -87,7 +88,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                    className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -98,7 +99,7 @@ export function Footer() {
 
           {/* Support links */}
           <div>
-            <h3 className="text-sm font-medium text-foreground uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-medium text-[#E78A22] uppercase tracking-wider mb-4">
               Support
             </h3>
             <ul className="space-y-3">
@@ -106,7 +107,7 @@ export function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                    className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
                   >
                     {link.label}
                   </a>
@@ -118,14 +119,14 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border/30 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-[#E78A22]/60">
             © {new Date().getFullYear()} TOMOCA Coffee. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-xs text-[#E78A22]/60 hover:text-[#E78A22] transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="text-xs text-[#E78A22]/60 hover:text-[#E78A22] transition-colors">
               Terms of Service
             </a>
           </div>
