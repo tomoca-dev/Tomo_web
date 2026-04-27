@@ -13,7 +13,7 @@
 @layer base {
   :root {
     /* Core brand colors - rich coffee palette */
-    --background: 30 15% 6%;
+    --background: 32 79% 52%;
     --foreground: 35 30% 92%;
 
     --card: 30 12% 10%;
@@ -58,7 +58,7 @@
     --copper: 25 65% 45%;
     
     /* Gradients */
-    --gradient-hero: linear-gradient(180deg, hsl(30 15% 4%) 0%, hsl(30 15% 8%) 50%, hsl(25 20% 6%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(32 79% 45%) 0%, hsl(32 79% 52%) 50%, hsl(32 79% 40%) 100%);
     --gradient-bean: linear-gradient(145deg, hsl(32 55% 32%) 0%, hsl(25 45% 12%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(38 72% 52%) 0%, hsl(25 65% 45%) 100%);
     
@@ -87,7 +87,7 @@
 
   /* Light theme - elegant cream and warm tones */
   .light {
-    --background: 40 30% 97%;
+    --background: 32 79% 52%;
     --foreground: 25 50% 10%;
 
     --card: 40 25% 98%;
@@ -127,7 +127,7 @@
     --copper: 25 55% 38%;
     
     /* Light gradients */
-    --gradient-hero: linear-gradient(180deg, hsl(40 30% 97%) 0%, hsl(35 25% 95%) 50%, hsl(40 20% 93%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(32 79% 60%) 0%, hsl(32 79% 52%) 50%, hsl(32 79% 55%) 100%);
     --gradient-bean: linear-gradient(145deg, hsl(32 50% 45%) 0%, hsl(25 40% 25%) 100%);
     --gradient-gold: linear-gradient(135deg, hsl(38 65% 40%) 0%, hsl(25 55% 38%) 100%);
     
