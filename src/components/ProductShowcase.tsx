@@ -29,7 +29,7 @@ export function ProductShowcase() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   const [products, setProducts] = useState<Product[]>([]);
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -142,7 +142,7 @@ export function ProductShowcase() {
                   </div>
                   <div className="flex items-center justify-between pt-4">
                     <span className="text-2xl font-display text-foreground">
-                      {formatPrice(product.price)}
+                      {currency === "ETB" ? formatPrice(product.price) : "Inquiry Only"}
                     </span>
                     <span className="inline-flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
                       View <ArrowRight className="w-4 h-4 ml-1" />

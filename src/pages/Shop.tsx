@@ -32,7 +32,7 @@ export default function Shop() {
     fetchProducts();
   }, []);
 
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
 
   const fetchProducts = async () => {
     const { data, error } = await supabase
@@ -187,7 +187,7 @@ export default function Shop() {
                             {product.name}
                           </h3>
                           <span className="text-primary font-semibold">
-                            {formatPrice(product.price)}
+                            {currency === "ETB" ? formatPrice(product.price) : "Inquiry Only"}
                           </span>
                         </div>
                         

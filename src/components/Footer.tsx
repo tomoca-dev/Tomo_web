@@ -42,14 +42,16 @@ export function Footer() {
             {/* Social links */}
             <div className="flex gap-4">
               {[
-                { Icon: Instagram, label: "Instagram" },
-                { Icon: Twitter, label: "Twitter" },
-                { Icon: Facebook, label: "Facebook" },
-                { Icon: Send, label: "Telegram" },
-              ].map(({ Icon, label }) => (
+                { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/tomoca_coffee/" },
+                { Icon: Twitter, label: "Twitter", href: "#" },
+                { Icon: Facebook, label: "Facebook", href: "https://web.facebook.com/CaffeTomoca/?_rdc=1&_rdr#" },
+                { Icon: Send, label: "Telegram", href: "#" },
+              ].map(({ Icon, label, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-[#E78A22] hover:bg-secondary transition-colors duration-200"
                   aria-label={label}
                 >

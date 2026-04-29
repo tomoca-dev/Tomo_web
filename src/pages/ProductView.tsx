@@ -70,7 +70,7 @@ export default function ProductView() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { toast } = useToast();
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
 
   useEffect(() => {
     if (id) {
@@ -247,6 +247,13 @@ export default function ProductView() {
     ? product.price + (selectedVariant?.price_adjustment || 0) 
     : 0;
 
+  const handleInquiry = () => {
+    const subject = encodeURIComponent(`Inquiry about ${product?.name}`);
+    const variantInfo = selectedVariant ? `\nVariant: ${selectedVariant.name}` : "";
+    const body = encodeURIComponent(`Hello,\n\nI would like to inquire about the following product:\nProduct: ${product?.name}${variantInfo}\nQuantity: ${quantity}\n\nPlease provide me with more details including pricing.\n\nThank you.`);
+    window.location.href = `mailto:info@tomocacoffee.com?subject=${subject}&body=${body}`;
+  };
+
   const displayImages = images.length > 0 
     ? images 
     : product?.image_url 
@@ -390,7 +397,7 @@ export default function ProductView() {
               </h1>
 
               <p className="text-2xl text-primary font-semibold mb-6">
-                {formatPrice(currentPrice)}
+                {currency === "ETB" ? formatPrice(currentPrice) : "Price on Inquiry"}
                 <span className="text-muted-foreground text-base font-normal ml-2">
                   / {selectedVariant?.weight_grams || product.weight_grams || 250}g
                 </span>
@@ -432,73 +439,115 @@ export default function ProductView() {
 
               {/* Quantity & Actions */}
               <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center border border-border rounded-lg">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
-                      aria-label="Decrease quantity"
-                    >
-                      −
-                    </button>
-                    <span className="w-12 text-center font-medium">{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
-                      aria-label="Increase quantity"
-                    >
-                      +
-                    </button>
-                  </div>
+                {currency === "ETB" ? (
+                  <>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center border border-border rounded-lg">
+                        <button
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
+                          aria-label="Decrease quantity"
+                        >
+                          −
+                        </button>
+                        <span className="w-12 text-center font-medium">{quantity}</span>
+                        <button
+                          onClick={() => setQuantity(quantity + 1)}
+                          className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
 
-                  <Button 
-                    onClick={handleAddToCart}
-                    className="flex-1 h-12 gold-gradient text-primary-foreground font-medium"
-                  >
-                    <ShoppingCart className="w-4 h-4 mr-2" />
-                    Add to Cart
-                  </Button>
+                      <Button 
+                        onClick={handleAddToCart}
+                        className="flex-1 h-12 gold-gradient text-primary-foreground font-medium"
+                      >
+                        <ShoppingCart className="w-4 h-4 mr-2" />
+                        Add to Cart
+                      </Button>
 
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-12 w-12"
-                    onClick={toggleWishlist}
-                    aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-                  >
-                    <Heart className={`w-5 h-5 ${isInWishlist ? "fill-primary text-primary" : ""}`} />
-                  </Button>
-                </div>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12"
+                        onClick={toggleWishlist}
+                        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                      >
+                        <Heart className={`w-5 h-5 ${isInWishlist ? "fill-primary text-primary" : ""}`} />
+                      </Button>
+                    </div>
 
-                <div className="flex flex-col gap-3">
-                  <Button
-                    onClick={handleBuyNow}
-                    className="w-full h-12"
-                  >
-                    Buy Now
-                  </Button>
+                    <div className="flex flex-col gap-3">
+                      <Button
+                        onClick={handleBuyNow}
+                        className="w-full h-12"
+                      >
+                        Buy Now
+                      </Button>
 
-                  {/* Optional Telegram ordering */}
-                  {TELEGRAM_ORDER_URL ? (
+                      {/* Optional Telegram ordering */}
+                      {TELEGRAM_ORDER_URL ? (
+                        <Button
+                          variant="outline"
+                          className="w-full h-12"
+                          onClick={handleOrderViaTelegram}
+                        >
+                          Order via Telegram
+                        </Button>
+                      ) : null}
+                    </div>
+
+                    {/* Subscribe Option */}
                     <Button
                       variant="outline"
                       className="w-full h-12"
-                      onClick={handleOrderViaTelegram}
+                      onClick={handleSubscribe}
                     >
-                      Order via Telegram
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Subscribe & Save 10%
                     </Button>
-                  ) : null}
-                </div>
-
-                {/* Subscribe Option */}
-                <Button
-                  variant="outline"
-                  className="w-full h-12"
-                  onClick={handleSubscribe}
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Subscribe & Save 10%
-                </Button>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center border border-border rounded-lg">
+                        <button
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
+                          aria-label="Decrease quantity"
+                        >
+                          −
+                        </button>
+                        <span className="w-12 text-center font-medium">{quantity}</span>
+                        <button
+                          onClick={() => setQuantity(quantity + 1)}
+                          className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
+                          aria-label="Increase quantity"
+                        >
+                          +
+                        </button>
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12"
+                        onClick={toggleWishlist}
+                        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                      >
+                        <Heart className={`w-5 h-5 ${isInWishlist ? "fill-primary text-primary" : ""}`} />
+                      </Button>
+                    </div>
+                    <Button 
+                      onClick={handleInquiry}
+                      className="w-full h-12 gold-gradient text-primary-foreground font-medium"
+                    >
+                      Ask an Inquiry
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Trust Badges */}
