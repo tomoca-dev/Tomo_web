@@ -441,8 +441,8 @@ export default function ProductView() {
               <div className="space-y-4 mb-8">
                 {currency === "ETB" ? (
                   <>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center border border-border rounded-lg">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
+                      <div className="flex items-center border border-border rounded-lg shrink-0">
                         <button
                           onClick={() => setQuantity(Math.max(1, quantity - 1))}
                           className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"
@@ -462,7 +462,7 @@ export default function ProductView() {
 
                       <Button 
                         onClick={handleAddToCart}
-                        className="flex-1 h-12 gold-gradient text-primary-foreground font-medium"
+                        className="flex-1 w-full sm:w-auto h-12 gold-gradient text-primary-foreground font-medium shrink-0"
                       >
                         <ShoppingCart className="w-4 h-4 mr-2" />
                         Add to Cart
@@ -511,8 +511,8 @@ export default function ProductView() {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex items-center border border-border rounded-lg">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-4 mb-4">
+                      <div className="flex items-center border border-border rounded-lg shrink-0">
                         <button
                           onClick={() => setQuantity(Math.max(1, quantity - 1))}
                           className="w-12 h-12 flex items-center justify-center text-lg hover:bg-secondary/50 transition-colors"

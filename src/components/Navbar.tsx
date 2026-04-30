@@ -85,9 +85,11 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <BeanDensityControl />
-          <CurrencySelector />
-          <ThemeToggle />
+          <div className="hidden md:flex items-center gap-1">
+            <BeanDensityControl />
+            <CurrencySelector />
+            <ThemeToggle />
+          </div>
 
           {user && (
             <Button variant="ghost" size="icon" className="relative text-foreground" aria-label="Wishlist" asChild>
@@ -205,6 +207,19 @@ export function Navbar() {
                   </button>
                 </motion.div>
               )}
+
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.3, delay: (navLinks.length + 3) * 0.05 }} 
+                className="flex items-center justify-between pt-4 mt-2 border-t border-border/50"
+              >
+                <div className="flex items-center gap-4">
+                  <CurrencySelector />
+                  <ThemeToggle />
+                </div>
+                <BeanDensityControl />
+              </motion.div>
             </div>
           </motion.div>
         )}
