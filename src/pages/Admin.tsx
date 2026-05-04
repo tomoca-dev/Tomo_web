@@ -299,7 +299,7 @@ export default function Admin() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="price">Price ($) *</Label>
+                          <Label htmlFor="price">Price (ETB) *</Label>
                           <Input
                             id="price"
                             type="number"
@@ -492,7 +492,7 @@ export default function Admin() {
                                 <p className="text-sm text-muted-foreground">{product.roast_level} Roast</p>
                               </div>
                             </td>
-                            <td className="px-6 py-4 font-medium">${product.price.toFixed(2)}</td>
+                            <td className="px-6 py-4 font-medium">{product.price.toFixed(2)} ETB</td>
                             <td className="px-6 py-4 text-muted-foreground">{product.origin || "—"}</td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">

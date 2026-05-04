@@ -5,14 +5,14 @@ type Currency = "USD" | "EUR" | "ETB";
 interface CurrencyContextType {
   currency: Currency;
   setCurrency: (currency: Currency) => void;
-  formatPrice: (priceInUSD: number) => string;
-  convertPrice: (priceInUSD: number) => number;
+  formatPrice: (basePrice: number) => string;
+  convertPrice: (basePrice: number) => number;
 }
 
 const rates: Record<Currency, { rate: number; symbol: string; label: string }> = {
-  USD: { rate: 1, symbol: "$", label: "USD" },
-  EUR: { rate: 0.92, symbol: "€", label: "EUR" },
-  ETB: { rate: 65, symbol: "Br", label: "Birr" },
+  ETB: { rate: 1, symbol: "Br", label: "Birr" },
+  USD: { rate: 1 / 65, symbol: "$", label: "USD" },
+  EUR: { rate: 0.92 / 65, symbol: "€", label: "EUR" },
 };
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
@@ -20,7 +20,7 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(() => {
     const saved = localStorage.getItem("tomo-currency");
-    return (saved as Currency) || "USD";
+    return (saved as Currency) || "ETB";
   });
 
   const setCurrency = (newCurrency: Currency) => {
@@ -28,12 +28,12 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("tomo-currency", newCurrency);
   };
 
-  const convertPrice = (priceInUSD: number) => {
-    return priceInUSD * rates[currency].rate;
+  const convertPrice = (basePrice: number) => {
+    return basePrice * rates[currency].rate;
   };
 
-  const formatPrice = (priceInUSD: number) => {
-    const converted = convertPrice(priceInUSD);
+  const formatPrice = (basePrice: number) => {
+    const converted = convertPrice(basePrice);
     const { symbol } = rates[currency];
     
     if (currency === "ETB") {

@@ -555,7 +555,7 @@ export default function ProductView() {
                 <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full" />
-                    Free shipping over {formatPrice(50)}
+                    Free shipping over {formatPrice(2500)}
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full" />
