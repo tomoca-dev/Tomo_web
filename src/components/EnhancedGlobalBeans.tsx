@@ -155,7 +155,7 @@ export function EnhancedGlobalBeans({
           style={{
             width: bean.size,
             height: bean.size * 1.4,
-            transform: `translate3d(0, 0, ${bean.parallaxZ * -100}px)`,
+            z: bean.parallaxZ * -100,
             transformStyle: "preserve-3d",
           }}
         >

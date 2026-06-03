@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Instagram, Twitter, Facebook, Send } from "lucide-react";
+import { Instagram, Facebook, Send } from "lucide-react";
 
 const footerLinks = {
   shop: [
@@ -15,10 +15,10 @@ const footerLinks = {
     { label: "Visit Us", href: "/#story" },
   ],
   support: [
-    { label: "Contact", href: "#" },
-    { label: "Shipping", href: "#" },
-    { label: "Returns", href: "#" },
-    { label: "FAQ", href: "#" },
+    { label: "Contact", href: "/contact", isInternal: true },
+    { label: "Shipping", href: "/contact", isInternal: true },
+    { label: "Returns", href: import.meta.env.VITE_TELEGRAM_ORDER_URL || "https://t.me/Tomocashopbot", isInternal: false },
+    { label: "FAQ", href: "#", isInternal: false },
   ],
 };
 
@@ -43,7 +43,6 @@ export function Footer() {
             <div className="flex gap-4">
               {[
                 { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/tomoca_coffee/" },
-                { Icon: Twitter, label: "Twitter", href: "#" },
                 { Icon: Facebook, label: "Facebook", href: "https://web.facebook.com/CaffeTomoca/?_rdc=1&_rdr#" },
                 { Icon: Send, label: "Telegram", href: "#" },
               ].map(({ Icon, label, href }) => (
@@ -107,12 +106,23 @@ export function Footer() {
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
-                  >
-                    {link.label}
-                  </a>
+                  {link.isInternal ? (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      target={link.href.startsWith("http") ? "_blank" : undefined}
+                      rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="text-sm text-[#E78A22]/70 hover:text-[#E78A22] transition-colors duration-200"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

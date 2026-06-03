@@ -11,7 +11,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Coffee, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+
+const CoffeeBeanIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <ellipse cx="12" cy="12" rx="6" ry="9" transform="rotate(-45 12 12)" />
+    <path d="M12 3c1 4-1 8 0 18" transform="rotate(-45 12 12)" />
+  </svg>
+);
 
 const densityOptions = [
   { value: "default", label: "Default", description: "Balanced animation" },
@@ -37,7 +52,7 @@ export function BeanDensityControl() {
         <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
-              <Coffee className="h-4 w-4" />
+              <CoffeeBeanIcon className="h-4 w-4" />
               {density !== "default" && (
                 <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full" />
               )}

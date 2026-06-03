@@ -19,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
@@ -68,6 +69,10 @@ export default function Admin() {
     is_featured: false,
     is_available: true,
     image_url: "",
+    grind_options: {
+      whole_bean: false,
+      ground_coffee: false,
+    },
   });
 
   const PRODUCT_CATEGORIES = [
@@ -127,6 +132,65 @@ export default function Admin() {
     setUploading(false);
   };
 
+  const syncProductVariants = async (
+    productId: string,
+    grindOptions: { whole_bean: boolean; ground_coffee: boolean },
+    weightGrams: number
+  ) => {
+    if (formData.category !== "coffee") return;
+
+    // Fetch existing variants
+    const { data: existingVariants } = await supabase
+      .from("product_variants")
+      .select("*")
+      .eq("product_id", productId);
+
+    const wholeBeanVariant = existingVariants?.find((v) => v.grind_type === "whole_bean");
+    const groundCoffeeVariant = existingVariants?.find((v) => v.grind_type === "ground_coffee");
+
+    // Whole Bean sync
+    if (grindOptions.whole_bean) {
+      if (!wholeBeanVariant) {
+        await supabase.from("product_variants").insert({
+          product_id: productId,
+          name: "Whole Bean",
+          grind_type: "whole_bean",
+          weight_grams: weightGrams,
+          price_adjustment: 0,
+          is_available: true,
+        });
+      } else {
+        await supabase
+          .from("product_variants")
+          .update({ weight_grams: weightGrams })
+          .eq("id", wholeBeanVariant.id);
+      }
+    } else if (wholeBeanVariant) {
+      await supabase.from("product_variants").delete().eq("id", wholeBeanVariant.id);
+    }
+
+    // Ground Coffee sync
+    if (grindOptions.ground_coffee) {
+      if (!groundCoffeeVariant) {
+        await supabase.from("product_variants").insert({
+          product_id: productId,
+          name: "Ground Coffee",
+          grind_type: "ground_coffee",
+          weight_grams: weightGrams,
+          price_adjustment: 0,
+          is_available: true,
+        });
+      } else {
+        await supabase
+          .from("product_variants")
+          .update({ weight_grams: weightGrams })
+          .eq("id", groundCoffeeVariant.id);
+      }
+    } else if (groundCoffeeVariant) {
+      await supabase.from("product_variants").delete().eq("id", groundCoffeeVariant.id);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -152,16 +216,22 @@ export default function Admin() {
       if (error) {
         toast({ title: "Update failed", description: error.message, variant: "destructive" });
       } else {
+        await syncProductVariants(editingProduct.id, formData.grind_options, productData.weight_grams);
         toast({ title: "Product updated" });
         fetchProducts();
         resetForm();
       }
     } else {
-      const { error } = await supabase.from("products").insert(productData);
+      const { data: newProduct, error } = await supabase
+        .from("products")
+        .insert(productData)
+        .select("id")
+        .single();
 
       if (error) {
         toast({ title: "Creation failed", description: error.message, variant: "destructive" });
-      } else {
+      } else if (newProduct) {
+        await syncProductVariants(newProduct.id, formData.grind_options, productData.weight_grams);
         toast({ title: "Product created" });
         fetchProducts();
         resetForm();
@@ -169,8 +239,18 @@ export default function Admin() {
     }
   };
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = async (product: Product) => {
     setEditingProduct(product);
+    
+    // Fetch variants to see what is already selected
+    const { data: variants } = await supabase
+      .from("product_variants")
+      .select("*")
+      .eq("product_id", product.id);
+
+    const hasWholeBean = variants?.some((v) => v.grind_type === "whole_bean") || false;
+    const hasGroundCoffee = variants?.some((v) => v.grind_type === "ground_coffee") || false;
+
     setFormData({
       name: product.name,
       category: product.category || "coffee",
@@ -182,6 +262,10 @@ export default function Admin() {
       is_featured: product.is_featured || false,
       is_available: product.is_available ?? true,
       image_url: product.image_url || "",
+      grind_options: {
+        whole_bean: hasWholeBean,
+        ground_coffee: hasGroundCoffee,
+      },
     });
     setIsDialogOpen(true);
   };
@@ -212,6 +296,10 @@ export default function Admin() {
       is_featured: false,
       is_available: true,
       image_url: "",
+      grind_options: {
+        whole_bean: false,
+        ground_coffee: false,
+      },
     });
     setIsDialogOpen(false);
   };
@@ -332,6 +420,49 @@ export default function Admin() {
                           This controls the Telegram Shop category menu.
                         </p>
                       </div>
+
+                      {formData.category === "coffee" && (
+                        <div className="space-y-3 p-4 bg-secondary/20 rounded-xl border border-border/50">
+                          <Label className="text-sm font-medium">Grind Options</Label>
+                          <div className="flex gap-6 mt-1">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <Checkbox
+                                id="grind-option-whole-bean"
+                                checked={formData.grind_options.whole_bean}
+                                onCheckedChange={(checked) =>
+                                  setFormData({
+                                    ...formData,
+                                    grind_options: {
+                                      ...formData.grind_options,
+                                      whole_bean: !!checked,
+                                    },
+                                  })
+                                }
+                              />
+                              <span className="text-sm font-normal">Whole Beans</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <Checkbox
+                                id="grind-option-ground-coffee"
+                                checked={formData.grind_options.ground_coffee}
+                                onCheckedChange={(checked) =>
+                                  setFormData({
+                                    ...formData,
+                                    grind_options: {
+                                      ...formData.grind_options,
+                                      ground_coffee: !!checked,
+                                    },
+                                  })
+                                }
+                              />
+                              <span className="text-sm font-normal">Ground Coffee</span>
+                            </label>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            Select which grind formats are available for purchase.
+                          </p>
+                        </div>
+                      )}
 
                       <div className="space-y-2">
                         <Label htmlFor="description">Description</Label>

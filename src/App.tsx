@@ -16,12 +16,13 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Admin from "./pages/Admin";
 import OurStory from "./pages/OurStory";
- import Wishlist from "./pages/Wishlist";
+import Wishlist from "./pages/Wishlist";
  import Locations from "./pages/Locations";
  import Regions from "./pages/Regions";
  import NotFound from "./pages/NotFound";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
                     <Route path="/wishlist" element={<Wishlist />} />
                     <Route path="/locations" element={<Locations />} />
                     <Route path="/regions" element={<Regions />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/admin" element={<Admin />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
