@@ -28,7 +28,7 @@ async function queryIsAdminFallback(userId: string): Promise<boolean> {
     // Supabase .maybeSingle() returns { data, error }
     if (res.error) {
       console.warn("user_roles query error:", res.error);
-      return false;
+      throw res.error;
     }
 
     // data may be null or { role: 'admin' }
@@ -36,7 +36,7 @@ async function queryIsAdminFallback(userId: string): Promise<boolean> {
     return String(role).toLowerCase() === "admin";
   } catch (err) {
     console.error("queryIsAdminFallback unexpected error:", err);
-    return false;
+    throw err;
   }
 }
 
@@ -48,17 +48,29 @@ async function setAdminFromSession(s: Session | null, setIsAdmin: (v: boolean) =
       return;
     }
 
+    const userId = s.user.id;
     const metaRole = (s.user.user_metadata as any)?.role;
     if (metaRole && String(metaRole).toLowerCase() === "admin") {
       setIsAdmin(true);
+      localStorage.setItem(`tomo_is_admin_${userId}`, "true");
       return;
     }
 
     // fallback to table query
-    const fallback = await queryIsAdminFallback(s.user.id);
+    const fallback = await queryIsAdminFallback(userId);
     setIsAdmin(fallback);
+    localStorage.setItem(`tomo_is_admin_${userId}`, String(fallback));
   } catch (err) {
     console.error("setAdminFromSession error:", err);
+    // If the database query fails, fall back to the localStorage cached value if available
+    if (s?.user) {
+      const cached = localStorage.getItem(`tomo_is_admin_${s.user.id}`) === "true";
+      if (cached) {
+        console.info("Preserving cached admin status due to query failure");
+        setIsAdmin(true);
+        return;
+      }
+    }
     setIsAdmin(false);
   }
 }
@@ -82,7 +94,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         console.debug("[auth] init session:", s);
         setSession(s);
-        setUser(s?.user ?? null);
+        const currentUser = s?.user ?? null;
+        setUser(currentUser);
+
+        if (currentUser) {
+          // Eagerly initialize from cache to prevent UI flash / redirects
+          const cached = localStorage.getItem(`tomo_is_admin_${currentUser.id}`) === "true";
+          setIsAdmin(cached);
+        }
 
         await setAdminFromSession(s, (v) => { if (mounted) setIsAdmin(v); });
       } catch (err) {
@@ -100,11 +119,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!mounted) return;
 
       console.debug("[auth] onAuthStateChange event:", event, s);
+      const currentUser = s?.user ?? null;
       setSession(s ?? null);
-      setUser(s?.user ?? null);
+      setUser(currentUser);
 
-      // re-evaluate admin
-      await setAdminFromSession(s ?? null, (v) => { if (mounted) setIsAdmin(v); });
+      if (event === "SIGNED_OUT") {
+        setIsAdmin(false);
+        // Clear all admin caches
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key?.startsWith("tomo_is_admin_")) {
+            localStorage.removeItem(key);
+            i--; // adjust index since we removed an item
+          }
+        }
+      } else if (currentUser) {
+        // Eagerly initialize from cache
+        const cached = localStorage.getItem(`tomo_is_admin_${currentUser.id}`) === "true";
+        setIsAdmin(cached);
+
+        await setAdminFromSession(s ?? null, (v) => { if (mounted) setIsAdmin(v); });
+      } else {
+        setIsAdmin(false);
+      }
 
       if (mounted) setLoading(false);
     });
@@ -165,6 +202,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setIsAdmin(false);
+
+      // Clean up cache
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith("tomo_is_admin_")) {
+          localStorage.removeItem(key);
+          i--; // adjust index since we removed an item
+        }
+      }
     }
   };
 
