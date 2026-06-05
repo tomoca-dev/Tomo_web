@@ -42,7 +42,8 @@ export default function Locations() {
     setLoading(false);
   };
 
-  const getTodayHours = (hours: Record<string, string>) => {
+  const getTodayHours = (hours: Record<string, string> | null | undefined) => {
+    if (!hours || typeof hours !== 'object') return 'Hours not available';
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const today = days[new Date().getDay()];
     return hours[today] || 'Hours not available';

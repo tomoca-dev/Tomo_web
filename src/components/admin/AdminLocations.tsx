@@ -27,6 +27,9 @@
    is_flagship: boolean | null;
    is_active: boolean | null;
    image_url: string | null;
+   opening_hours: Record<string, string> | null;
+   latitude: number | null;
+   longitude: number | null;
  }
  
  export function AdminLocations() {
@@ -35,19 +38,22 @@
    const [isDialogOpen, setIsDialogOpen] = useState(false);
    const [editingLocation, setEditingLocation] = useState<StoreLocation | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    city: "",
-    region: "",
-    country: "Ethiopia",
-    phone: "",
-    is_flagship: false,
-    is_active: true,
-    image_url: "",
-    latitude: "",
-    longitude: "",
-  });
+   const [formData, setFormData] = useState({
+     name: "",
+     address: "",
+     city: "",
+     region: "",
+     country: "Ethiopia",
+     phone: "",
+     is_flagship: false,
+     is_active: true,
+     image_url: "",
+     latitude: "",
+     longitude: "",
+     weekday_hours: "6:00 AM - 9:00 PM",
+     saturday_hours: "7:00 AM - 10:00 PM",
+     sunday_hours: "7:00 AM - 8:00 PM",
+   });
    const { toast } = useToast();
  
    useEffect(() => {
@@ -75,20 +81,30 @@
        });
        return;
      }
- 
-    const locationData = {
-      name: formData.name,
-      address: formData.address,
-      city: formData.city,
-      region: formData.region || null,
-      country: formData.country,
-      phone: formData.phone || null,
-      is_flagship: formData.is_flagship,
-      is_active: formData.is_active,
-      image_url: formData.image_url || null,
-      latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-      longitude: formData.longitude ? parseFloat(formData.longitude) : null,
-    };
+     const opening_hours = {
+       monday: formData.weekday_hours || "Closed",
+       tuesday: formData.weekday_hours || "Closed",
+       wednesday: formData.weekday_hours || "Closed",
+       thursday: formData.weekday_hours || "Closed",
+       friday: formData.weekday_hours || "Closed",
+       saturday: formData.saturday_hours || "Closed",
+       sunday: formData.sunday_hours || "Closed",
+     };
+
+     const locationData = {
+       name: formData.name,
+       address: formData.address,
+       city: formData.city,
+       region: formData.region || null,
+       country: formData.country,
+       phone: formData.phone || null,
+       is_flagship: formData.is_flagship,
+       is_active: formData.is_active,
+       image_url: formData.image_url || null,
+       latitude: formData.latitude ? parseFloat(formData.latitude) : null,
+       longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+       opening_hours,
+     };
  
      if (editingLocation) {
        const { error } = await supabase
@@ -131,6 +147,7 @@
  
    const handleEdit = (location: StoreLocation) => {
      setEditingLocation(location);
+     const hours = location.opening_hours || {};
      setFormData({
        name: location.name,
        address: location.address,
@@ -138,30 +155,36 @@
        region: location.region || "",
        country: location.country,
        phone: location.phone || "",
-      is_flagship: location.is_flagship || false,
-      is_active: location.is_active ?? true,
-      image_url: location.image_url || "",
-      latitude: (location as any).latitude?.toString() || "",
-      longitude: (location as any).longitude?.toString() || "",
-    });
+       is_flagship: location.is_flagship || false,
+       is_active: location.is_active ?? true,
+       image_url: location.image_url || "",
+       latitude: location.latitude?.toString() || "",
+       longitude: location.longitude?.toString() || "",
+       weekday_hours: hours.monday || "6:00 AM - 9:00 PM",
+       saturday_hours: hours.saturday || "7:00 AM - 10:00 PM",
+       sunday_hours: hours.sunday || "7:00 AM - 8:00 PM",
+     });
      setIsDialogOpen(true);
    };
  
    const resetForm = () => {
      setEditingLocation(null);
-    setFormData({
-      name: "",
-      address: "",
-      city: "",
-      region: "",
-      country: "Ethiopia",
-      phone: "",
-      is_flagship: false,
-      is_active: true,
-      image_url: "",
-      latitude: "",
-      longitude: "",
-    });
+     setFormData({
+       name: "",
+       address: "",
+       city: "",
+       region: "",
+       country: "Ethiopia",
+       phone: "",
+       is_flagship: false,
+       is_active: true,
+       image_url: "",
+       latitude: "",
+       longitude: "",
+       weekday_hours: "6:00 AM - 9:00 PM",
+       saturday_hours: "7:00 AM - 10:00 PM",
+       sunday_hours: "7:00 AM - 8:00 PM",
+     });
    };
  
    const toggleActive = async (id: string, currentStatus: boolean) => {
@@ -306,6 +329,39 @@
                     />
                   </div>
                 </div>
+                
+                 <div className="space-y-3 p-3 bg-secondary/15 rounded-xl border border-border/40">
+                   <Label className="text-sm font-medium">Opening Hours</Label>
+                   <div className="space-y-2">
+                     <div className="grid grid-cols-2 items-center gap-2">
+                       <span className="text-xs text-muted-foreground">Weekdays (Mon-Fri)</span>
+                       <Input
+                         value={formData.weekday_hours}
+                         onChange={(e) => setFormData({ ...formData, weekday_hours: e.target.value })}
+                         placeholder="6:00 AM - 9:00 PM"
+                         className="h-8 text-xs bg-[#1E1E24] border-border"
+                       />
+                     </div>
+                     <div className="grid grid-cols-2 items-center gap-2">
+                       <span className="text-xs text-muted-foreground">Saturday</span>
+                       <Input
+                         value={formData.saturday_hours}
+                         onChange={(e) => setFormData({ ...formData, saturday_hours: e.target.value })}
+                         placeholder="7:00 AM - 10:00 PM"
+                         className="h-8 text-xs bg-[#1E1E24] border-border"
+                       />
+                     </div>
+                     <div className="grid grid-cols-2 items-center gap-2">
+                       <span className="text-xs text-muted-foreground">Sunday</span>
+                       <Input
+                         value={formData.sunday_hours}
+                         onChange={(e) => setFormData({ ...formData, sunday_hours: e.target.value })}
+                         placeholder="7:00 AM - 8:00 PM"
+                         className="h-8 text-xs bg-[#1E1E24] border-border"
+                       />
+                     </div>
+                   </div>
+                 </div>
                <div className="flex items-center justify-between">
                  <Label>Flagship Store</Label>
                  <Switch

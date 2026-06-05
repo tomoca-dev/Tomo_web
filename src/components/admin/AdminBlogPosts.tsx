@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, FileText } from "lucide-react";
+import { Plus, Pencil, Trash2, FileText, Upload, ImageIcon } from "lucide-react";
 
 interface BlogPost {
   id: string;
@@ -43,6 +43,7 @@ export function AdminBlogPosts() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editing, setEditing] = useState<BlogPost | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -80,6 +81,39 @@ export function AdminBlogPosts() {
       setPosts((data as BlogPost[]) ?? []);
     }
     setLoading(false);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const filePath = `blog/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("product-images")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      toast({
+        title: "Upload failed",
+        description: uploadError.message,
+        variant: "destructive",
+      });
+    } else {
+      const { data } = supabase.storage
+        .from("product-images")
+        .getPublicUrl(filePath);
+      
+      setForm((prev) => ({ ...prev, cover_image_url: data.publicUrl }));
+      toast({
+        title: "Image uploaded",
+        description: "Your image has been uploaded successfully.",
+      });
+    }
+    setUploading(false);
   };
 
   const resetForm = () => {
@@ -251,13 +285,42 @@ export function AdminBlogPosts() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cover">Cover Image URL</Label>
-                <Input
-                  id="cover"
-                  value={form.cover_image_url}
-                  onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
-                  placeholder="https://..."
-                />
+                <Label>Cover Image</Label>
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-24 bg-card border border-border rounded-lg flex items-center justify-center overflow-hidden shrink-0">
+                    {form.cover_image_url ? (
+                      <img src={form.cover_image_url} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                      className="hidden"
+                      id="cover-image-upload"
+                    />
+                    <label htmlFor="cover-image-upload">
+                      <Button type="button" variant="outline" className="cursor-pointer" asChild>
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          {uploading ? "Uploading..." : "Upload Image"}
+                        </span>
+                      </Button>
+                    </label>
+                    <p className="text-xs text-muted-foreground mt-1">Or paste a URL below</p>
+                    <Input
+                      id="cover"
+                      placeholder="https://..."
+                      value={form.cover_image_url}
+                      onChange={(e) => setForm({ ...form, cover_image_url: e.target.value })}
+                      className="mt-2"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-2">
