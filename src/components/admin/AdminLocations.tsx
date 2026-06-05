@@ -67,7 +67,7 @@
        .order("is_flagship", { ascending: false });
  
      if (!error && data) {
-       setLocations(data);
+       setLocations(data as unknown as StoreLocation[]);
      }
      setLoading(false);
    };
