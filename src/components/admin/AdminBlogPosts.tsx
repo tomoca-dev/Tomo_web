@@ -170,6 +170,7 @@ export function AdminBlogPosts() {
       excerpt: form.excerpt.trim() || null,
       content: form.content.trim() || null,
       cover_image_url: form.cover_image_url.trim() || null,
+      // Public Journal pages read this field, and RLS policy below also uses it.
       is_published: !!form.is_published,
       published_at: form.is_published
         ? form.published_at

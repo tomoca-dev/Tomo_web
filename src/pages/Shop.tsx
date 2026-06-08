@@ -39,6 +39,7 @@ export default function Shop() {
       .from("products")
       .select("*")
       .eq("is_available", true)
+      .neq("category", "merchandise")
       .order("is_featured", { ascending: false });
 
     if (!error && data) {
