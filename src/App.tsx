@@ -11,6 +11,7 @@ import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Shop from "./pages/Shop";
+import Merchandise from "./pages/Merchandise";
 import ProductView from "./pages/ProductView";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -41,6 +42,7 @@ const App = () => (
                     <Route path="/" element={<Index />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/shop" element={<Shop />} />
+                    <Route path="/merchandise" element={<Merchandise />} />
                     <Route path="/product/:id" element={<ProductView />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/checkout" element={<Checkout />} />

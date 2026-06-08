@@ -4,6 +4,7 @@ import { Instagram, Facebook, Send } from "lucide-react";
 const footerLinks = {
   shop: [
     { label: "All Coffee", href: "/shop" },
+    { label: "Merchandise", href: "/merchandise" },
     { label: "Subscriptions", href: "/shop" },
     { label: "Brewing Gear", href: "/shop" },
     { label: "Gifts", href: "/shop" },

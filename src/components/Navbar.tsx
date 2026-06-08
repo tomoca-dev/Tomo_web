@@ -19,6 +19,7 @@ import {
 
 const navLinks = [
   { label: "Shop", href: "/shop" },
+  { label: "Merchandise", href: "/merchandise" },
   { label: "Regions", href: "/regions" },
   { label: "Locations", href: "/locations" },
   { label: "Our Story", href: "/our-story" },

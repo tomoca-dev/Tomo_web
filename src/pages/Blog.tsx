@@ -38,7 +38,14 @@ export default function Blog() {
       .eq("is_published", true)
       .order("published_at", { ascending: false });
 
-    if (!error && data) {
+    if (error) {
+      console.error("Error fetching blog posts:", error);
+      toast({
+        title: "Error fetching posts",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else if (data) {
       setPosts(data);
     }
     setLoading(false);

@@ -48,7 +48,11 @@ export default function BlogPost() {
         .eq("is_published", true)
         .single();
 
-      if (!error && data) setPost(data as BlogPostRow);
+      if (error) {
+        console.error("Error fetching blog post details:", error);
+      } else if (data) {
+        setPost(data as BlogPostRow);
+      }
       setLoading(false);
     };
 

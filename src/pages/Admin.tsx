@@ -78,6 +78,7 @@ export default function Admin() {
   const PRODUCT_CATEGORIES = [
     { value: "coffee", label: "Coffee" },
     { value: "accessories", label: "Accessories" },
+    { value: "merchandise", label: "Merchandise" },
     { value: "other", label: "Other" },
   ] as const;
 
