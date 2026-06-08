@@ -11,7 +11,7 @@ import { CurrencyProvider } from "@/contexts/CurrencyContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Shop from "./pages/Shop";
-import Merchandise from "./pages/Merchandise";
+import Merchandise from "@/pages/Merchandise";
 import ProductView from "./pages/ProductView";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
