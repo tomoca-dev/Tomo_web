@@ -1,0 +1,9 @@
+import React from 'react';
+import PageShell from '@/components/tomoca/PageShell';
+import SectionHeading from '@/components/tomoca/SectionHeading';
+import { img } from '@/components/tomoca/Data';
+
+export default function About() {
+  const timeline = ['1953 · Tomoca begins as an Addis Ababa coffee landmark', 'Generations · Ethiopian Arabica roasted for deep aroma', 'Today · Coffee houses, packaged beans, wholesale and culture'];
+  return <PageShell><main className="pt-32"><section className="mx-auto grid max-w-7xl gap-10 px-6 py-20 md:grid-cols-2 md:items-center"><div><SectionHeading eyebrow="About Tomoca" title="The modern archivist of Ethiopian coffee." text="Tomoca Coffee carries the ritual, agriculture, craft, and city energy of Ethiopia into every espresso and every pack. Our philosophy is simple: roast with discipline, serve with warmth, preserve the story." /><div className="grid gap-4">{timeline.map(t => <div key={t} className="rounded-2xl border bg-card p-5 font-semibold">{t}</div>)}</div></div><img src={img.store} alt="Illustration of the original Tomoca store" className="rounded-[3rem] shadow-2xl" /></section><section className="bg-primary py-20"><div className="mx-auto grid max-w-7xl gap-6 px-6 md:grid-cols-3"><div><h3 className="font-display text-4xl font-black">Mission</h3><p className="mt-3 text-lg">Share authentic Ethiopian coffee with uncompromising freshness and hospitality.</p></div><div><h3 className="font-display text-4xl font-black">Vision</h3><p className="mt-3 text-lg">Make Ethiopian coffee culture globally admired, accessible, and protected.</p></div><div><h3 className="font-display text-4xl font-black">Values</h3><p className="mt-3 text-lg">Heritage, quality, community, ethical sourcing, and craft roasting.</p></div></div></section></main></PageShell>;
+}
