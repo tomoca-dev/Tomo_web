@@ -57,7 +57,7 @@ export default function LogoIntro() {
             initial={{ opacity: 0, scale: 0.88 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[85vw] max-w-4xl object-contain brightness-0 invert drop-shadow-[0_0_80px_rgba(255,107,0,0.55)] transform-gpu"
+            className="w-[85vw] max-w-4xl object-contain drop-shadow-[0_0_80px_rgba(255,107,0,0.3)] transform-gpu"
           />
 
           {/* Divider */}

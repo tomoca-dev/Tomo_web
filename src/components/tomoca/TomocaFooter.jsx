@@ -65,7 +65,7 @@ export default function TomocaFooter() {
                 src={img.logo}
                 alt="Tomoca Coffee"
                 whileHover={{ scale: 1.03 }}
-                className="h-16 w-auto object-contain brightness-0 invert mb-7 drop-shadow-[0_0_40px_rgba(230,110,0,0.35)]"
+                className="h-16 w-auto object-contain mb-7 drop-shadow-[0_0_40px_rgba(230,110,0,0.15)]"
               />
               <p className="max-w-lg text-xl leading-relaxed text-white/50 font-light">
                 Authentic Ethiopian coffee roasted with soul since 1953 — for cafés, homes, ceremonies, and those who taste the difference.

@@ -57,7 +57,7 @@ export default function TomocaHeader() {
                 alt="Tomoca Coffee"
                 whileHover={{ scale: 1.06 }}
                 transition={{ type: 'spring', stiffness: 400 }}
-                className="h-9 w-auto object-contain brightness-0 invert drop-shadow-[0_0_20px_rgba(230,110,0,0.5)]"
+                className="h-9 w-auto object-contain drop-shadow-[0_0_12px_rgba(230,110,0,0.2)]"
               />
             </Link>
 
@@ -118,7 +118,7 @@ export default function TomocaHeader() {
               )}
 
               <motion.a
-                href="https://t.me/Tomocashopbot?text=Hi%20Tomoca!%20I'd%20like%20to%20place%20an%20order"
+                href="https://t.me/TomTomChan?text=Hi%20Tomoca!%20I'd%20like%20to%20place%20an%20order"
                 target="_blank"
                 rel="noreferrer"
                 whileHover={{ scale: 1.04 }}
@@ -168,7 +168,7 @@ export default function TomocaHeader() {
               <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-accent" />
 
               <div className="flex items-center justify-between mb-12">
-                <img src={img.logo} alt="Tomoca" className="h-8 brightness-0 invert" />
+                <img src={img.logo} alt="Tomoca" className="h-8 object-contain" />
                 <button onClick={() => setOpen(false)} className="rounded-full p-2 text-white/40 hover:text-white transition-colors">
                   <X className="h-5 w-5" />
                 </button>
@@ -236,7 +236,7 @@ export default function TomocaHeader() {
                 )}
 
                 <a
-                  href="https://t.me/Tomocashopbot?text=Hi%20Tomoca!%20I'd%20like%20to%20place%20an%20order"
+                  href="https://t.me/TomTomChan?text=Hi%20Tomoca!%20I'd%20like%20to%20place%20an%20order"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center justify-center gap-2 rounded-full bg-primary py-4 text-sm font-semibold text-white shadow-xl shadow-primary/30"

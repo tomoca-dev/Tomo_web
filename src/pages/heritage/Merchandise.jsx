@@ -18,7 +18,7 @@ export default function Merchandise() {
     <PageShell>
       <main className="pt-32">
         <section className="flex flex-col items-center justify-center bg-foreground py-24 text-center">
-          <img src={img.logo} alt="Tomoca Coffee" className="w-72 object-contain brightness-0 invert drop-shadow-[0_0_80px_rgba(255,107,0,0.55)] md:w-[32rem]" />
+          <img src={img.logo} alt="Tomoca Coffee" className="w-72 object-contain drop-shadow-[0_0_80px_rgba(255,107,0,0.3)] md:w-[32rem]" />
           <div className="mt-6 h-px w-48 bg-primary/50" />
           <p className="mt-4 text-sm font-black uppercase tracking-[0.6em] text-white/50">Maison Tomoca</p>
         </section>
