@@ -169,8 +169,16 @@ export default function Merchandise() {
                           <h3 className="font-display text-xl group-hover:text-primary transition-colors duration-200 line-clamp-1">
                             {product.name}
                           </h3>
-                          <span className="text-primary font-semibold shrink-0">
-                            {currency === "ETB" ? formatPrice(product.price) : "Inquiry Only"}
+                          <span className="text-primary font-semibold text-right flex flex-col items-end shrink-0">
+                            {currency === "ETB" ? (
+                              <span>{formatPrice(product.price)}</span>
+                            ) : (
+                              <>
+                                <span className="text-base">{formatPrice(product.price)}</span>
+                                <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider mt-0.5">Inquiry Only</span>
+                                <span className="text-[10px] text-muted-foreground font-normal">{formatPrice(product.price, "ETB")}</span>
+                              </>
+                            )}
                           </span>
                         </div>
                         

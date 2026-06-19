@@ -9,8 +9,21 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Cart() {
   const { items, subtotal, itemCount, setQuantity, removeItem } = useCart();
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currency } = useCurrency();
   const navigate = useNavigate();
+
+  const handleCartInquiry = () => {
+    const subject = encodeURIComponent("International Order Inquiry - Tomoca Coffee");
+    const itemsText = items.map(item => {
+      const variantText = item.variantName ? ` (${item.variantName})` : "";
+      return `- ${item.quantity}x ${item.name}${variantText}`;
+    }).join("\n");
+    const totalETB = formatPrice(subtotal, "ETB");
+    const totalSelected = formatPrice(subtotal);
+    const body = encodeURIComponent(`Hello Tomoca Coffee Team,\n\nI would like to inquire about placing an international order for the following items:\n\n${itemsText}\n\nEstimated Subtotal: ${totalSelected} (${totalETB})\n\nPlease contact me with payment options and shipping rates for my location.\n\nThank you!`);
+    
+    window.location.href = `mailto:info@tomocacoffee.com?subject=${subject}&body=${body}`;
+  };
 
   return (
     <Layout showGlobalBeans={false}>
@@ -33,6 +46,12 @@ export default function Cart() {
           ) : (
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-4">
+                {currency !== "ETB" && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 text-amber-200 p-4 rounded-2xl text-sm flex flex-col gap-1 mb-2">
+                    <span className="font-semibold text-amber-400">International Order (Inquiry Only)</span>
+                    <span>Checkout is currently only available for orders paid in Ethiopian Birr. You can submit an order inquiry below, and our team will contact you to coordinate pricing and shipping.</span>
+                  </div>
+                )}
                 {items.map((item) => (
                   <div key={`${item.productId}-${item.variantId ?? "base"}`} className="bg-card/30 border border-border rounded-2xl p-4 flex gap-4">
                     <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted/30 flex-shrink-0">
@@ -46,7 +65,14 @@ export default function Cart() {
                         <div>
                           <p className="font-medium">{item.name}</p>
                           {item.variantName ? <p className="text-sm text-muted-foreground">{item.variantName}</p> : null}
-                          <p className="text-sm mt-1">{formatPrice(item.unitPrice)}</p>
+                          <p className="text-sm mt-1">
+                            {formatPrice(item.unitPrice)}
+                            {currency !== "ETB" && (
+                              <span className="text-xs text-muted-foreground ml-2">
+                                ({formatPrice(item.unitPrice, "ETB")})
+                              </span>
+                            )}
+                          </p>
                         </div>
                         <Button
                           variant="ghost"
@@ -87,7 +113,14 @@ export default function Cart() {
                           </Button>
                         </div>
 
-                        <p className="font-medium">{formatPrice(item.unitPrice * item.quantity)}</p>
+                        <div className="text-right">
+                          <p className="font-medium">{formatPrice(item.unitPrice * item.quantity)}</p>
+                          {currency !== "ETB" && (
+                            <p className="text-xs text-muted-foreground">
+                              {formatPrice(item.unitPrice * item.quantity, "ETB")}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -98,14 +131,29 @@ export default function Cart() {
                 <h2 className="font-display text-2xl mb-4">Summary</h2>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">{formatPrice(subtotal)}</span>
+                  <div className="text-right">
+                    <span className="font-medium block">{formatPrice(subtotal)}</span>
+                    {currency !== "ETB" && (
+                      <span className="text-xs text-muted-foreground block">
+                        {formatPrice(subtotal, "ETB")}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="text-xs text-muted-foreground mb-6">
-                  Taxes and shipping are calculated at checkout.
+                  {currency === "ETB" 
+                    ? "Taxes and shipping are calculated at checkout." 
+                    : "International shipping will be quoted by email after submitting your inquiry."}
                 </div>
-                <Button className="w-full" onClick={() => navigate("/checkout")}>
-                  Checkout
-                </Button>
+                {currency === "ETB" ? (
+                  <Button className="w-full" onClick={() => navigate("/checkout")}>
+                    Checkout
+                  </Button>
+                ) : (
+                  <Button className="w-full gold-gradient text-primary-foreground font-semibold" onClick={handleCartInquiry}>
+                    Inquire about Order
+                  </Button>
+                )}
                 <Button variant="outline" className="w-full mt-3" asChild>
                   <Link to="/shop">Continue Shopping</Link>
                 </Button>

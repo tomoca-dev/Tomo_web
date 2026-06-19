@@ -396,12 +396,33 @@ export default function ProductView() {
                 {product.name}
               </h1>
 
-              <p className="text-2xl text-primary font-semibold mb-6">
-                {currency === "ETB" ? formatPrice(currentPrice) : "Price on Inquiry"}
-                <span className="text-muted-foreground text-base font-normal ml-2">
-                  / {selectedVariant?.weight_grams || product.weight_grams || 250}g
-                </span>
-              </p>
+              <div className="mb-6">
+                {currency === "ETB" ? (
+                  <p className="text-2xl text-primary font-semibold">
+                    {formatPrice(currentPrice)}
+                    <span className="text-muted-foreground text-base font-normal ml-2">
+                      / {selectedVariant?.weight_grams || product.weight_grams || 250}g
+                    </span>
+                  </p>
+                ) : (
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl text-primary font-semibold">
+                        {formatPrice(currentPrice)}
+                      </span>
+                      <span className="text-xs bg-amber-500/20 text-amber-500 px-2.5 py-1 rounded font-bold uppercase tracking-wider">
+                        Inquiry Only
+                      </span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Original Price: {formatPrice(currentPrice, "ETB")}
+                      <span className="text-muted-foreground text-xs font-normal ml-2">
+                        / {selectedVariant?.weight_grams || product.weight_grams || 250}g
+                      </span>
+                    </p>
+                  </div>
+                )}
+              </div>
 
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
                 {product.description}

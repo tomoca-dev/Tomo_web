@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 const ROAST_COLORS = {
   'Light': { bar: 'bg-amber-300', text: 'text-amber-800', bg: 'bg-amber-50' },
@@ -34,13 +35,16 @@ function RoastBar({ level }) {
 
 function BeanCard({ product, onClick }) {
   const c = ROAST_COLORS[product.roast_level] || ROAST_COLORS['Medium'];
+  const { formatPrice, currency } = useCurrency();
+  const basePrice = product.price_etb || product.price || (product.price_usd ? product.price_usd * 65 : 0);
+
   return (
     <motion.button
       onClick={() => onClick(product)}
       whileHover={{ y: -8, scale: 1.02, boxShadow: '0 24px 64px rgba(255,107,0,0.18)' }}
       whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className="group relative flex flex-col overflow-hidden rounded-[2rem] border bg-card text-left shadow-sm">
+      className="group relative flex flex-col overflow-hidden rounded-[2rem] border bg-card text-left shadow-sm h-full">
       
       {/* product image */}
       <div className="relative flex h-64 items-center justify-center overflow-hidden bg-primary/10 p-6">
@@ -63,11 +67,42 @@ function BeanCard({ product, onClick }) {
         <p className="mt-1 text-sm text-muted-foreground">{product.weight}</p>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-2">{product.roast_profile}</p>
         <RoastBar level={product.roast_level} />
-        <div className="mt-5 flex items-center justify-between">
-          <span className="font-display text-2xl font-black">${product.price_usd}</span>
-          <Button asChild size="sm" className="rounded-full">
-            <Link to="/order" onClick={(e) => e.stopPropagation()}><ShoppingBag className="mr-1 h-3 w-3" />Order</Link>
-          </Button>
+        
+        <div className="mt-5 flex items-center justify-between gap-2">
+          <div className="flex flex-col">
+            {currency === "ETB" ? (
+              <span className="font-display text-2xl font-black text-foreground">
+                {formatPrice(basePrice)}
+              </span>
+            ) : (
+              <>
+                <span className="font-display text-xl font-black text-foreground">
+                  {formatPrice(basePrice)}
+                </span>
+                <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider mt-0.5">Inquiry Only</span>
+                <span className="text-[10px] text-muted-foreground font-normal">{formatPrice(basePrice, "ETB")}</span>
+              </>
+            )}
+          </div>
+          
+          {currency === "ETB" ? (
+            <Button asChild size="sm" className="rounded-full shrink-0">
+              <Link to="/order" onClick={(e) => e.stopPropagation()}><ShoppingBag className="mr-1 h-3 w-3" />Order</Link>
+            </Button>
+          ) : (
+            <Button 
+              size="sm" 
+              className="rounded-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs px-4 py-1.5 shrink-0"
+              onClick={(e) => {
+                e.stopPropagation();
+                const subject = encodeURIComponent(`Inquiry about ${product.name}`);
+                const body = encodeURIComponent(`Hello,\n\nI would like to inquire about the following product:\nProduct: ${product.name}\n\nPlease provide me with more details including pricing.\n\nThank you.`);
+                window.location.href = `mailto:info@tomocacoffee.com?subject=${subject}&body=${body}`;
+              }}
+            >
+              Inquire
+            </Button>
+          )}
         </div>
       </div>
       </motion.button>);
@@ -77,6 +112,9 @@ function BeanCard({ product, onClick }) {
 function BeanModal({ product, onClose }) {
   if (!product) return null;
   const c = ROAST_COLORS[product.roast_level] || ROAST_COLORS['Medium'];
+  const { formatPrice, currency } = useCurrency();
+  const basePrice = product.price_etb || product.price || (product.price_usd ? product.price_usd * 65 : 0);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/60 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
@@ -121,11 +159,46 @@ function BeanModal({ product, onClose }) {
               </div>
             }
           </div>
-          <div className="mt-8 flex items-center justify-between">
-            <span className="font-display text-4xl font-black">${product.price_usd}</span>
-            <Button asChild size="lg" className="rounded-full px-8">
-              <Link to="/order"><ShoppingBag className="mr-2 h-4 w-4" />Order Now</Link>
-            </Button>
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col">
+              {currency === "ETB" ? (
+                <span className="font-display text-4xl font-black text-foreground">
+                  {formatPrice(basePrice)}
+                </span>
+              ) : (
+                <>
+                  <div className="flex items-center gap-3">
+                    <span className="font-display text-4xl font-black text-foreground">
+                      {formatPrice(basePrice)}
+                    </span>
+                    <span className="text-xs bg-amber-500/20 text-amber-500 px-2.5 py-1 rounded font-bold uppercase tracking-wider">
+                      Inquiry Only
+                    </span>
+                  </div>
+                  <span className="text-xs text-muted-foreground mt-1 font-normal">
+                    Original Price: {formatPrice(basePrice, "ETB")}
+                  </span>
+                </>
+              )}
+            </div>
+            
+            {currency === "ETB" ? (
+              <Button asChild size="lg" className="rounded-full px-8">
+                <Link to="/order"><ShoppingBag className="mr-2 h-4 w-4" />Order Now</Link>
+              </Button>
+            ) : (
+              <Button 
+                size="lg" 
+                className="rounded-full px-8 bg-amber-500 hover:bg-amber-600 text-white font-semibold"
+                onClick={() => {
+                  const subject = encodeURIComponent(`Inquiry about ${product.name}`);
+                  const body = encodeURIComponent(`Hello,\n\nI would like to inquire about the following product:\nProduct: ${product.name}\n\nPlease provide me with more details including pricing.\n\nThank you.`);
+                  window.location.href = `mailto:info@tomocacoffee.com?subject=${subject}&body=${body}`;
+                }}
+              >
+                Submit Inquiry
+              </Button>
+            )}
           </div>
         </div>
       </div>

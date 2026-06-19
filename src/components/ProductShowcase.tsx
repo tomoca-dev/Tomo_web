@@ -141,8 +141,16 @@ export function ProductShowcase() {
                     )}
                   </div>
                   <div className="flex items-center justify-between pt-4">
-                    <span className="text-2xl font-display text-foreground">
-                      {currency === "ETB" ? formatPrice(product.price) : "Inquiry Only"}
+                    <span className="text-foreground shrink-0 text-left flex flex-col">
+                      {currency === "ETB" ? (
+                        <span className="text-2xl font-display">{formatPrice(product.price)}</span>
+                      ) : (
+                        <>
+                          <span className="text-xl font-display font-semibold">{formatPrice(product.price)}</span>
+                          <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider mt-0.5">Inquiry Only</span>
+                          <span className="text-[10px] text-muted-foreground font-normal">{formatPrice(product.price, "ETB")}</span>
+                        </>
+                      )}
                     </span>
                     <span className="inline-flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
                       View <ArrowRight className="w-4 h-4 ml-1" />

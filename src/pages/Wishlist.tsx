@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { Heart, Trash2, ShoppingCart, Package } from "lucide-react";
 import { Navigate } from "react-router-dom";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 interface WishlistItem {
   id: string;
@@ -27,6 +28,7 @@ export default function Wishlist() {
   const [items, setItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { formatPrice, currency } = useCurrency();
 
   useEffect(() => {
     if (user) fetchWishlist();
@@ -166,9 +168,16 @@ export default function Wishlist() {
                         {item.product.origin}
                       </p>
                     )}
-                    <p className="text-primary font-semibold mt-1">
-                      ${item.product?.price.toFixed(2)}
-                    </p>
+                    <div className="text-primary font-semibold mt-1">
+                      {currency === "ETB" ? (
+                        <span>{formatPrice(item.product?.price ?? 0)}</span>
+                      ) : (
+                        <div className="flex flex-col text-left">
+                          <span className="text-base">{formatPrice(item.product?.price ?? 0)} <span className="text-[10px] text-amber-500 font-bold uppercase ml-1">Inquiry Only</span></span>
+                          <span className="text-[10px] text-muted-foreground font-normal">{formatPrice(item.product?.price ?? 0, "ETB")}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex flex-col gap-2">

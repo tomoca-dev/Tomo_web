@@ -14,7 +14,7 @@ export function CurrencySelector() {
   const currencies: { code: "USD" | "EUR" | "ETB"; label: string; symbol: string }[] = [
     { code: "USD", label: "US Dollar", symbol: "$" },
     { code: "EUR", label: "Euro", symbol: "€" },
-    { code: "ETB", label: "Ethiopian Birr", symbol: "Br" },
+    { code: "ETB", label: "Ethiopian Birr", symbol: "Birr" },
   ];
 
   return (

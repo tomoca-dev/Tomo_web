@@ -11,6 +11,7 @@ import HomeSubscription from '@/components/tomoca/HomeSubscription';
 import { img, locations } from '@/components/tomoca/Data';
 import { Reveal, StaggerContainer, fadeUp, slideLeft, slideRight, scaleIn } from '@/components/tomoca/ScrollReveal';
 import CoffeeCupDeco from '@/components/tomoca/CoffeeCupDeco';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
 /* ─── HERO ────────────────────────────────────────────────────────────────── */
 function HeroSection() {
@@ -204,11 +205,13 @@ function ProductFeature() {
     queryFn: () => base44.entities.Product.list('created_at', 12),
   });
 
+  const { formatPrice, currency } = useCurrency();
+
   const fallbackProducts = [
-    { image_url: img.pouch500, name: 'Standing Pouch', weight: '500g', price_usd: 18, badge: 'Best Seller', bg: 'bg-stone-100' },
-    { image_url: img.heritage, name: 'Heritage Pack', weight: '375g', price_usd: 15, badge: 'Classic', bg: 'bg-amber-50', tall: true },
-    { image_url: img.compact, name: 'Compact Pack', weight: '250g', price_usd: 11, badge: 'Starter', bg: 'bg-orange-50' },
-    { image_url: img.tin, name: 'Collectible Tin', weight: '200g', price_usd: 22, badge: 'Limited', bg: 'bg-amber-100', tall: true },
+    { image_url: img.pouch500, name: 'Standing Pouch', weight: '500g', price_usd: 18, price_etb: 1170, badge: 'Best Seller', bg: 'bg-stone-100' },
+    { image_url: img.heritage, name: 'Heritage Pack', weight: '375g', price_usd: 15, price_etb: 975, badge: 'Classic', bg: 'bg-amber-50', tall: true },
+    { image_url: img.compact, name: 'Compact Pack', weight: '250g', price_usd: 11, price_etb: 715, badge: 'Starter', bg: 'bg-orange-50' },
+    { image_url: img.tin, name: 'Collectible Tin', weight: '200g', price_usd: 22, price_etb: 1430, badge: 'Limited', bg: 'bg-amber-100', tall: true },
   ];
 
   const products = (dbProducts.length ? dbProducts.filter(p => p.is_featured || p.available !== false).slice(0, 4) : fallbackProducts);
@@ -242,7 +245,7 @@ function ProductFeature() {
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             {products.map((p, i) => {
-              const price = p.price_usd ?? p.price ?? 0;
+              const basePrice = p.price_etb || p.price || (p.price_usd ? p.price_usd * 65 : 0) || fallbackProducts[i % fallbackProducts.length].price_etb;
               const src = p.image_url || p.image || fallbackProducts[i % fallbackProducts.length].image_url;
               return (
                 <motion.div key={p.id || p.name} variants={scaleIn} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} custom={i} whileHover={{ y: -12 }} transition={{ type: 'spring', stiffness: 260, damping: 22 }} className={`group relative overflow-hidden rounded-[2.5rem] ${p.bg || 'bg-stone-100'} ${p.tall ? 'md:mt-10' : ''}`}>
@@ -250,13 +253,27 @@ function ProductFeature() {
                   <div className={`relative flex items-center justify-center p-8 ${p.tall ? 'min-h-[360px]' : 'min-h-[280px]'}`}>
                     <img src={src} alt={p.name} className="relative h-full max-h-52 w-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-108" />
                   </div>
-                  <div className="p-5 pt-0">
+                  <div className="p-5 pt-0 text-left">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-muted-foreground">{p.weight || (p.weight_grams ? `${p.weight_grams}g` : 'Coffee')}</p>
                     <p className="mt-1 font-display text-xl font-semibold text-foreground">{p.name}</p>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="font-display text-2xl font-light italic text-foreground">${price}</span>
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <div className="flex flex-col">
+                        {currency === "ETB" ? (
+                          <span className="font-display text-2xl font-light italic text-foreground">
+                            {formatPrice(basePrice)}
+                          </span>
+                        ) : (
+                          <>
+                            <span className="font-display text-xl font-light italic text-foreground">
+                              {formatPrice(basePrice)}
+                            </span>
+                            <span className="text-[10px] text-amber-500 font-bold uppercase tracking-wider mt-0.5">Inquiry Only</span>
+                            <span className="text-[10px] text-muted-foreground font-normal">{formatPrice(basePrice, "ETB")}</span>
+                          </>
+                        )}
+                      </div>
                       <Link to={p.id ? `/product/${p.id}` : '/shop'}>
-                        <motion.span whileHover={{ scale: 1.1 }} className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background transition-all group-hover:bg-primary group-hover:text-white">
+                        <motion.span whileHover={{ scale: 1.1 }} className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background transition-all group-hover:bg-primary group-hover:text-white shrink-0">
                           <ArrowUpRight className="h-4 w-4" />
                         </motion.span>
                       </Link>

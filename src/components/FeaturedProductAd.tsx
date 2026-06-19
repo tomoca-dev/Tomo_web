@@ -174,9 +174,27 @@ export function FeaturedProductAd() {
             {/* Price indicator */}
             <div className="pt-4 flex items-baseline gap-3">
               <span className="text-sm text-muted-foreground">Premium Selection:</span>
-              <span className="text-3xl font-display text-foreground font-semibold">
-                {currency === "ETB" ? formatPrice(product.price) : "Inquiry Only"}
-              </span>
+              <div className="flex flex-col">
+                {currency === "ETB" ? (
+                  <span className="text-3xl font-display text-foreground font-semibold">
+                    {formatPrice(product.price)}
+                  </span>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl font-display text-foreground font-semibold">
+                        {formatPrice(product.price)}
+                      </span>
+                      <span className="text-xs bg-amber-500/20 text-amber-500 px-2 py-1 rounded font-bold uppercase tracking-wider">
+                        Inquiry Only
+                      </span>
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      Original: {formatPrice(product.price, "ETB")}
+                    </span>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Action buttons */}
